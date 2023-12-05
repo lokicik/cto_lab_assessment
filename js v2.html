@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        #main-menu, #create-game, #list-of-games {
+            display: none;
+            text-align: center;
+        }
+
+        button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 5px;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            font-size: 24px;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<div id="main-menu">
+    <h1>Welcome to Tic Tac Toe Game!</h1>
+    <button onclick="showCreateGame()">Create Game</button>
+    <button onclick="showListOfGames()">List of Games</button>
+    <button onclick="changeName()">Change Name</button>
+</div>
+
+<div id="create-game">
+    <h1>Create Game</h1>
+    <button onclick="startGame()">Start Game</button>
+    <button onclick="backToMainMenu()">Back to Main Menu</button>
+</div>
+
+<div id="list-of-games">
+    <h1>List of Games</h1>
+    <textarea id="games-list" rows="10" cols="30" readonly></textarea>
+    <button onclick="backToMainMenu()">Back to Main Menu</button>
+</div>
+
+<script>
+    let playerNameInput;
+    let playerName;
+    let currentPlayer = "X";
+    let board = ["", "", "", "", "", "", "", "", ""];
+    let gameActive = false;
+
+    document.addEventListener("DOMContentLoaded", function () {
+        playerNameInput = document.getElementById("player-name-input");
+        playerNameInput.addEventListener("input", function () {
+            playerName = playerNameInput.value;
+        });
+    });
+
+    function showCreateGame() {
+        document.getElementById("main-menu").style.display = "none";
+        document.getElementById("create-game").style.display = "block";
+    }
+
+    function showListOfGames() {
+        document.getElementById("main-menu").style.display = "none";
+        document.getElementById("list-of-games").style.display = "block";
+        showSavedGames();
+    }
+
+    function startGame() {
+        document.getElementById("create-game").style.display = "none";
+        resetGame();
+        gameActive = true;
+        createGameBoard();
+    }
+
+    function backToMainMenu() {
+        document.getElementById("create-game").style.display = "none";
+        document.getElementById("list-of-games").style.display = "none";
+        document.getElementById("main-menu").style.display = "block";
+    }
+
+    function changeName() {
+        playerNameInput.value = "";
+        playerName = "";
+        document.getElementById("main-menu").style.display = "none";
+        document.getElementById("create-game").style.display = "block";
+    }
+
+    function createGameBoard() {
+        let boardElement = document.createElement("div");
+        boardElement.id = "game-board";
+        document.body.appendChild(boardElement);
+
+        for (let i = 0; i < 9; i++) {
+            let cell = document.createElement("div");
+            cell.className = "cell";
+            cell.setAttribute("data-index", i);
+            cell.onclick = function () {
+                if (gameActive && board[i] === "") {
+                    makeMove(i);
+                }
+            };
+            boardElement.appendChild(cell);
+        }
+    }
+
+    function makeMove(position) {
+        board[position] = currentPlayer;
+        document.querySelector(`[data-index="${position}"]`).innerText = currentPlayer;
+        if (checkWinner()) {
+            alert(`Player ${currentPlayer} wins!`);
+            resetGame();
+        } else if (!board.includes("")) {
+            alert("It's a tie!");
+            resetGame();
+        } else {
+            currentPlayer = currentPlayer === "X" ? "O" : "X";
+        }
+    }
+
+    function checkWinner() {
+        const winPatterns = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        return winPatterns.some(pattern => {
+            const [a, b, c] = pattern;
+            return board[a] !== "" && board[a] === board[b] && board[b] === board[c];
+        });
+    }
+
+    function resetGame() {
+        document.getElementById("game-board").remove();
+        board = ["", "", "", "", "", "", "", "", ""];
+        gameActive = false;
+        currentPlayer = "X";
+    }
+
+    function showSavedGames() {
+        try {
+            let savedGames = localStorage.getItem("game_results");
+            if (savedGames) {
+                document.getElementById("games-list").value = savedGames;
+            } else {
+                document.getElementById("games-list").value = "No saved games yet!";
+            }
+        } catch (error) {
+            console.error("Error reading saved games:", error);
+            document.getElementById("games-list").value = "Error reading saved games.";
+        }
+    }
+</script>
+
+</body>
+</html>
