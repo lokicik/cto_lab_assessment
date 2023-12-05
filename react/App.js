@@ -1,6 +1,6 @@
 // App.js
 import React from 'react';
-import TicTacToe from './v4';
+import TicTacToe from './TicTacToe';
 import './App.css'; // Add your styles in App.css
 
 function App() {

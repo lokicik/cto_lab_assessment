@@ -1,0 +1,12 @@
+2023-12-05 21:23:21: lokman - Player X wins, Board Color: blue
+2023-12-05 21:23:24: lokman - Player X wins, Board Color: blue
+2023-12-05 21:23:30: lokman - Player O wins, Board Color: blue
+2023-12-05 21:23:37: lokman - Player O wins, Board Color: blue
+2023-12-05 21:23:44: lokman - Player X wins, Board Color: blue
+2023-12-05 21:23:49: lokman - It's a tie!, Board Color: blue
+2023-12-05 21:40:52: loki - Player O wins, Board Color: white
+2023-12-05 21:44:09: lokman - Player O wins, Board Color: white
+2023-12-05 21:49:40: loki - It's a tie!, Board Color: white
+2023-12-05 21:55:44: lokman - Player X wins, Board Color: white
+2023-12-05 22:09:28: loki - Player X wins, Board Color: white
+2023-12-05 22:09:35: loki - It's a tie!, Board Color: blue
