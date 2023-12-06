@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 5px;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            font-size: 24px;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid #ccc;
+        }
+    </style>
+    <title>Tic Tac Toe</title>
+</head>
+<body>
+
+<div id="board"></div>
+
+<script>
+    let board = Array.from({ length: 3 }, () => Array(3).fill(''));
+    let currentPlayer = 'X';
+    let gameActive = true;
+
+    function initializeBoard() {
+        const boardContainer = document.getElementById('board');
+        boardContainer.innerHTML = '';
+
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.addEventListener('click', () => cellClick(i, j));
+                boardContainer.appendChild(cell);
+            }
+        }
+    }
+
+    function cellClick(row, col) {
+        if (gameActive && !board[row][col]) {
+            board[row][col] = currentPlayer;
+            updateCell(row, col);
+
+            if (checkWin()) {
+                alert(`Player ${currentPlayer} wins!`);
+                gameActive = false;
+            } else if (board.every(row => row.every(cell => cell !== ''))) {
+                alert('It\'s a draw!');
+                gameActive = false;
+            } else {
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                if (currentPlayer === 'O') {
+                    setTimeout(() => computerMove(), 500);
+                }
+            }
+        }
+    }
+
+    function updateCell(row, col) {
+        const cell = document.getElementsByClassName('cell')[row * 3 + col];
+        cell.innerText = board[row][col];
+    }
+
+    function checkWin() {
+        const winConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        return winConditions.some(condition => {
+            const [a, b, c] = condition;
+            return board[Math.floor(a / 3)][a % 3] !== '' &&
+                board[Math.floor(a / 3)][a % 3] === board[Math.floor(b / 3)][b % 3] &&
+                board[Math.floor(a / 3)][a % 3] === board[Math.floor(c / 3)][c % 3];
+        });
+    }
+
+    function computerMove() {
+        const emptyCells = [];
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (board[i][j] === '') {
+                    emptyCells.push({ row: i, col: j });
+                }
+            }
+        }
+
+        if (emptyCells.length > 0) {
+            const randomIndex = Math.floor(Math.random() * emptyCells.length);
+            const { row, col } = emptyCells[randomIndex];
+            board[row][col] = 'O';
+            updateCell(row, col);
+
+            if (checkWin()) {
+                alert('Computer wins! Better luck next time.');
+                gameActive = false;
+            } else if (board.every(row => row.every(cell => cell !== ''))) {
+                alert('It\'s a draw!');
+                gameActive = false;
+            } else {
+                currentPlayer = 'X';
+            }
+        }
+    }
+
+    initializeBoard();
+</script>
+
+</body>
+</html>

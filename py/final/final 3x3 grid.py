@@ -3,7 +3,7 @@ from tkinter import simpledialog, messagebox, scrolledtext
 import random
 from datetime import datetime
 
-class SingletonApp(tk.Tk):
+class MainApp(tk.Tk):
     _instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -86,28 +86,27 @@ class GameScreen:
         self.player_name = player_name
 
         self.current_player = "X"
-        self.board_size = 4  # Size of the board (4x4)
-        self.board = [""] * (self.board_size ** 2)
+        self.board = [""] * 9
 
-        self.buttons = [tk.Button(self.root, text="", width=8, height=2, command=lambda i=i: self.make_move(i)) for i in range(self.board_size ** 2)]
+        self.buttons = [tk.Button(self.root, text="", width=10, height=4, command=lambda i=i: self.make_move(i)) for i in range(9)]
 
-        for i in range(self.board_size):
-            for j in range(self.board_size):
-                self.buttons[i * self.board_size + j].grid(row=i, column=j)
+        for i in range(3):
+            for j in range(3):
+                self.buttons[i * 3 + j].grid(row=i, column=j)
 
         self.set_board_color("white")
 
         self.save_results_button = tk.Button(self.root, text="Saved Games", command=self.show_saved_games)
-        self.save_results_button.grid(row=self.board_size, column=0, columnspan=self.board_size, pady=10)
+        self.save_results_button.grid(row=3, column=0, columnspan=3, pady=10)
 
         self.change_color_button = tk.Button(self.root, text="Change Board Color", command=self.change_board_color)
-        self.change_color_button.grid(row=self.board_size + 1, column=0, columnspan=self.board_size, pady=10)
+        self.change_color_button.grid(row=4, column=0, columnspan=3, pady=10)
 
         self.return_to_main_button = tk.Button(self.root, text="Return to Main Menu", command=self.return_to_main)
-        self.return_to_main_button.grid(row=self.board_size + 2, column=0, columnspan=self.board_size, pady=10)
+        self.return_to_main_button.grid(row=5, column=0, columnspan=3, pady=10)
 
         self.close_program_button = tk.Button(self.root, text="Close Program", command=self.close_program)
-        self.close_program_button.grid(row=self.board_size + 3, column=0, columnspan=self.board_size, pady=10)
+        self.close_program_button.grid(row=6, column=0, columnspan=3, pady=10)
 
         self.save_active_game()
 
@@ -132,7 +131,7 @@ class GameScreen:
             else:
                 self.current_player = "O" if self.current_player == "X" else "X"
                 if self.current_player == "O":
-                    self.computer_move()  # Trigger computer move after the player
+                    self.computer_move()
 
     def computer_move(self):
         empty_positions = [i for i, value in enumerate(self.board) if value == ""]
@@ -141,23 +140,13 @@ class GameScreen:
             self.make_move(computer_position)
 
     def check_winner(self):
-        for i in range(self.board_size):
-            # Check rows and columns
-            if len(set(self.board[i * self.board_size: (i + 1) * self.board_size])) == 1 and self.board[i * self.board_size] != "":
+        for line in [(0, 1, 2), (3, 4, 5), (6, 7, 8), (0, 3, 6), (1, 4, 7), (2, 5, 8), (0, 4, 8), (2, 4, 6)]:
+            if self.board[line[0]] == self.board[line[1]] == self.board[line[2]] != "":
                 return True
-            if len(set(self.board[i::self.board_size])) == 1 and self.board[i] != "":
-                return True
-
-        # Check diagonals
-        if len(set(self.board[::self.board_size + 1])) == 1 and self.board[0] != "":
-            return True
-        if len(set(self.board[self.board_size - 1::self.board_size - 1])) == 1 and self.board[self.board_size - 1] != "":
-            return True
-
         return False
 
     def reset_board(self):
-        for i in range(self.board_size ** 2):
+        for i in range(9):
             self.buttons[i].config(text="")
             self.board[i] = ""
         self.current_player = "X"
@@ -242,6 +231,6 @@ class MainApplication:
         app.destroy()  # Close the entire application
 
 if __name__ == "__main__":
-    app = SingletonApp()
+    app = MainApp()
     MainApplication(app)
     app.mainloop()

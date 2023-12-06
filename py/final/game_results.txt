@@ -14,3 +14,6 @@
 2023-12-05 23:21:41: loki - It's a tie!, Board Color: white
 2023-12-05 23:21:46: loki - It's a tie!, Board Color: white
 2023-12-05 23:25:05: loki - Player X wins, Board Color: white
+2023-12-06 14:56:23: lokman - It's a tie!, Board Color: white
+2023-12-06 15:00:03: lokman - Player X wins, Board Color: white
+2023-12-06 15:00:50: lokman - Player X wins, Board Color: white
