@@ -209,6 +209,7 @@ class MainApplication:
         if not self.player_name:
             self.root.destroy()  # Close the application if the user doesn't enter a name
 
+        # Buttons
         self.create_game_button = tk.Button(self.root, text="Create Game", command=self.create_game)
         self.create_game_button.pack(pady=10)
 
